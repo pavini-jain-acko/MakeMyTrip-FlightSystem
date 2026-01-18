@@ -1,4 +1,4 @@
-package com.example.makemytrip.booking.model;
+package com.example.makemytrip.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

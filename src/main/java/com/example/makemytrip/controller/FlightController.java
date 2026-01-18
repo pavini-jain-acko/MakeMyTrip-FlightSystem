@@ -1,12 +1,9 @@
-package com.example.makemytrip.search.controller;
+package com.example.makemytrip.controller;
 
-import com.example.makemytrip.search.model.Flight;
-import com.example.makemytrip.search.service.SearchService;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.example.makemytrip.entity.Flight;
+import com.example.makemytrip.service.SearchService;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

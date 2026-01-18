@@ -1,7 +1,6 @@
-package com.example.makemytrip.booking.repository;
+package com.example.makemytrip.repository;
 
-import com.example.makemytrip.booking.model.Booking;
-import com.example.makemytrip.booking.model.User;
+import com.example.makemytrip.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

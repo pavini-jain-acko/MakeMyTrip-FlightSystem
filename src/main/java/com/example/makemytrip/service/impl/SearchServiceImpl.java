@@ -1,20 +1,18 @@
-package com.example.makemytrip.search.service;
+package com.example.makemytrip.service.impl;
 
-import com.example.makemytrip.search.model.Flight;
-import com.example.makemytrip.search.repository.FlightRepository;
-import org.apache.coyote.BadRequestException;
+import com.example.makemytrip.entity.Flight;
+import com.example.makemytrip.repository.FlightRepository;
+import com.example.makemytrip.service.SearchService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
-public class SearchServiceImpl implements SearchService{
+public class SearchServiceImpl implements SearchService {
     private final FlightRepository flightRepository;
 
     public SearchServiceImpl(FlightRepository flightRepository){

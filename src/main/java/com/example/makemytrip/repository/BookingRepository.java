@@ -1,8 +1,7 @@
-package com.example.makemytrip.booking.repository;
+package com.example.makemytrip.repository;
 
-import com.example.makemytrip.Payment.Service.PaymentService;
-import com.example.makemytrip.booking.model.Booking;
-import com.example.makemytrip.booking.model.BookingStatus;
+import com.example.makemytrip.entity.Booking;
+import com.example.makemytrip.enums.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

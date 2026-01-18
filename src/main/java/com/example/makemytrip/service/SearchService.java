@@ -1,6 +1,6 @@
-package com.example.makemytrip.search.service;
+package com.example.makemytrip.service;
 
-import com.example.makemytrip.search.model.Flight;
+import com.example.makemytrip.entity.Flight;
 
 import java.time.LocalDateTime;
 import java.util.List;

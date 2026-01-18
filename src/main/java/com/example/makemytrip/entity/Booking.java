@@ -1,5 +1,6 @@
-package com.example.makemytrip.booking.model;
+package com.example.makemytrip.entity;
 
+import com.example.makemytrip.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
