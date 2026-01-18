@@ -10,11 +10,11 @@ import com.example.makemytrip.enums.BookingStatus;
 import com.example.makemytrip.repository.BookingRepository;
 import com.example.makemytrip.repository.UserRepository;
 import com.example.makemytrip.repository.FlightRepository;
-import jakarta.validation.constraints.Null;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import lombok.extern.slf4j.Slf4j;
+
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -28,7 +28,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final FlightRepository flightRepository;
 
-    BookingServiceImpl(UserRepository userRepository, PaymentService paymentService, BookingRepository bookingRepository, FlightRepository flightRepository){
+    BookingServiceImpl(UserRepository userRepository, PaymentService paymentService, BookingRepository bookingRepository, FlightRepository flightRepository) {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.bookingRepository = bookingRepository;
@@ -37,32 +37,31 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     //TODD PJJ remove all params and just pass CreateBookingRequest
-    public CreateBookingResponse CreateBooking(CreateBookingRequest createBookingRequest){
+    public CreateBookingResponse CreateBooking(CreateBookingRequest createBookingRequest) {
 
-
-    String lockId = ("Flight-" + createBookingRequest.getFlightId());
+        String lockId = ("Flight-" + createBookingRequest.getFlightId());
         synchronized (lockId) {
 
             CreateBookingResponse createBookingResponse = new CreateBookingResponse();
             try {
                 //TODO PJJ
 
-
-                if(!userRepository.existsByUserid(createBookingRequest.getUserId())) {
+                if (!userRepository.existsByUserid(createBookingRequest.getUserId())) {
 
                     log.warn("No user exists for this userID " + createBookingRequest.getUserId());
-                    throw new ResponseStatusException(BAD_REQUEST, "Invalid UserID");
+                    createBookingResponse.setBookingStatus(BookingStatus.FAILED);
+                    createBookingResponse.setMessage("Invalid User ID");
+                    return createBookingResponse;
                 }
 
 
-                if(!flightRepository.existsByFlightidAndSeatsavailableGreaterThan(createBookingRequest.getFlightId(), 0)) {
+                if (!flightRepository.existsByFlightidAndSeatsavailableGreaterThan(createBookingRequest.getFlightId(), 0)) {
 
                     log.info("No seats available for create booking request " + createBookingRequest);
                     createBookingResponse.setBookingStatus(BookingStatus.FAILED);
                     createBookingResponse.setMessage("No Seats Available on the requested Flight");
+                    return createBookingResponse;
                 }
-
-
 
 
                 Booking booking = new Booking();
@@ -74,7 +73,7 @@ public class BookingServiceImpl implements BookingService {
 
 
                 boolean paymentStatus = paymentService.ProcessPayment();
-                if(paymentStatus) {
+                if (paymentStatus) {
                     booking.setStatus(BookingStatus.CONFIRMED);
 
                     flightRepository.updateSeatsavailableByFlightid(createBookingRequest.getFlightId());
@@ -90,7 +89,6 @@ public class BookingServiceImpl implements BookingService {
 
                 }
 
-
                 bookingRepository.save(booking);
 
                 return createBookingResponse;
@@ -105,24 +103,24 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public GetBookingDetailsResponse GetBookingDetails(Integer BookingID){
-        if(!bookingRepository.existsByBookingID(BookingID))
+    public GetBookingDetailsResponse GetBookingDetails(Integer BookingID) {
+        if (!bookingRepository.existsByBookingID(BookingID))
             throw new ResponseStatusException(BAD_REQUEST, "Invalid BookingID");
-        List<Booking> bookingsByBookingId =  bookingRepository.findByBookingID(BookingID);
+        List<Booking> bookingsByBookingId = bookingRepository.findByBookingID(BookingID);
         GetBookingDetailsResponse getBookingDetailsResponse = new GetBookingDetailsResponse();
         getBookingDetailsResponse.setBookingList(bookingsByBookingId);
         return getBookingDetailsResponse;
     }
 
     @Override
-    public List<Booking> GetBookingByUserID(Integer UserID){
-        if(!bookingRepository.existsByUserid(UserID))
+    public List<Booking> GetBookingByUserID(Integer UserID) {
+        if (!bookingRepository.existsByUserid(UserID))
             throw new ResponseStatusException(BAD_REQUEST, "Invalid UserID");
         return bookingRepository.findByUserid(UserID);
     }
 
     @Override
-    public boolean CancelBooking(Integer BookingID){
+    public boolean CancelBooking(Integer BookingID) {
         Booking booking = bookingRepository.findById(BookingID)
                 .orElseThrow(() -> new ResponseStatusException(BAD_REQUEST, "Invalid BookingID"));
 
